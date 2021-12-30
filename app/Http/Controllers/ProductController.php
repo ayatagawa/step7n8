@@ -11,6 +11,8 @@ use App\Http\Requests\ProductRequest;
 class ProductController extends Controller
 {
 
+// テスト
+
      /**
      * プロダクト一覧を表示する
      * @return view
@@ -18,12 +20,9 @@ class ProductController extends Controller
     public function showList(Request $request)
     {
         $company_name = \DB::table('companies')->get();
-        // dd($company_name);
 
         $search = $request->input('search');
         $maker_name = $request->all('company_id');
-        //query builder
-        // dump($maker_name);
 
         if(!empty($search)){
             $products = \DB::table('companies')
@@ -53,7 +52,6 @@ class ProductController extends Controller
 
         return view('product.list', compact('products', 'search', 'company_name'));   
     }
-    
 
     /**
      * プロダクト詳細を表示する
@@ -62,9 +60,7 @@ class ProductController extends Controller
      */
     public function showDetail($id)
     {
-        // $product = Product::find($id);
         $product = Product::with('company')->find($id);
-        // dd($product);
 
         if (is_null($product))
         {
@@ -82,7 +78,6 @@ class ProductController extends Controller
      */
     public function showCreate(){
         $company_name = \DB::table('companies')->get();
-        // dd($company_name);
         return view('product.form', compact('company_name'));
     }
 
@@ -98,13 +93,10 @@ class ProductController extends Controller
         // 商品のデータを受け取る
         $inputs = $request->all();
         $img = $request->file('image');
-        // dd($img);
         if(!empty($img)){
             $img = $request->file('image')->getPathname();
             $imageName = $request->file('image')->storeAs('', $img, 'public');
         }
-
-        // dd($img);
 
         \DB::beginTransaction();
         try {
@@ -113,7 +105,6 @@ class ProductController extends Controller
             \DB::commit();
         } catch(\Throwable $e) {
             \DB::rollback();
-            // abort(500);
             throw new \Exception($e->getMessage());
             
         }
@@ -130,9 +121,7 @@ class ProductController extends Controller
     public function showEdit($id)
     {
         $company_name = \DB::table('companies')->get();
-        // $product = Product::find($id);
         $product = Product::with('company')->find($id);
-        // dd($product);
 
         if (is_null($product)) {
             \Session::flash('err_msg', 'データがありません。');
@@ -152,7 +141,6 @@ class ProductController extends Controller
         // 商品のデータを受け取る
         $inputs = $request->all();
         $img = $request->file('image');
-        // dd($img);
         if(!empty($img)){
             $img = $request->file('image')->getPathname();
             $imageName = $request->file('image')->storeAs('', $img, 'public');
@@ -173,11 +161,9 @@ class ProductController extends Controller
             ]);            
             
             $product->save();
-            // dd($inputs);
             \DB::commit();
         } catch(\Throwable $e) {
             \DB::rollback();
-            // abort(500);
             throw new \Exception($e->getMessage());
         }
         
@@ -201,7 +187,6 @@ class ProductController extends Controller
             // ブログを削除
             Product::destroy($id);
         } catch(\Throwable $e) {
-            // abort(500);
             throw new \Exception($e->getMessage());
         }
 
