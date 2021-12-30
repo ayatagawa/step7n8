@@ -16,16 +16,16 @@ class CreateProductsTable extends Migration
         if (!Schema::hasTable('products')) {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('product_name');
             $table->integer('price');
             $table->integer('stock');
             $table->text('comment');
             $table->timestamps();
-            // $table->foreign('company_id')
-            // ->references('id')
-            // ->on('companies')
-            // ->onDelete('cascade');
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
             });
         }
     }

@@ -15,17 +15,45 @@ class ProductController extends Controller
      * プロダクト一覧を表示する
      * @return view
      */
-    public function showList()
+    public function showList(Request $request)
     {
+        $company_name = \DB::table('companies')->get();
+        // dd($company_name);
+
+        $search = $request->input('search');
+        $maker_name = $request->all('company_id');
         //query builder
-        $products = \DB::table('companies')
-        ->join('products','companies.id','=','products.company_id')
-        ->orderBy('products.id', 'asc')
-        ->get();
-        // dd($products);
-        return view('product.list', compact('products'));
-        
+        // dump($maker_name);
+
+        if(!empty($search)){
+            $products = \DB::table('companies')
+            ->join('products','companies.id','=','products.company_id')
+            ->orderBy('products.id', 'asc')
+            ->where('product_name', 'LIKE', '%'.$search.'%')
+            ->get();
+        }else if($request->has('company_id')){
+            $products = \DB::table('companies')
+            ->join('products','companies.id','=','products.company_id')
+            ->orderBy('products.id', 'asc')
+            ->where('products.company_id', $request->company_id)
+            ->get();
+        }else if(!empty($search) && $request->has('company_id')){
+            $products = \DB::table('companies')
+            ->join('products','companies.id','=','products.company_id')
+            ->orderBy('products.id', 'asc')
+            ->where('product_name', 'LIKE', '%'.$search.'%')
+            ->where('products.company_id', $request->company_id)
+            ->get();
+        }else{
+            $products = \DB::table('companies')
+            ->join('products','companies.id','=','products.company_id')
+            ->orderBy('products.id', 'asc')
+            ->get();
+        }
+
+        return view('product.list', compact('products', 'search', 'company_name'));   
     }
+    
 
     /**
      * プロダクト詳細を表示する
@@ -47,8 +75,6 @@ class ProductController extends Controller
         return view('product.detail', ['product' => $product]);
     }
 
-
-
     /**
      * プロダクト登録画面を表示する
      * 
@@ -67,7 +93,6 @@ class ProductController extends Controller
      */
     public function exeStore(ProductRequest $request)
     {
-
         $product = new Product();
 
         // 商品のデータを受け取る
@@ -78,7 +103,6 @@ class ProductController extends Controller
             $img = $request->file('image')->getPathname();
             $imageName = $request->file('image')->storeAs('', $img, 'public');
         }
-        
 
         // dd($img);
 

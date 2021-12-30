@@ -12,13 +12,13 @@ class AddCompanyIdProductsTable extends Migration
      * @return void
      */
     public function up(){
-        Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')
-            ->references('id')
-            ->on('companies')
-            ->onDelete('cascade');
-        });
+        // Schema::table('products', function (Blueprint $table) {
+        //     $table->bigInteger('company_id');
+        //     $table->foreign('company_id')
+        //     ->references('id')
+        //     ->on('companies')
+        //     ->onDelete('cascade');
+        // });
     }
 
     /**

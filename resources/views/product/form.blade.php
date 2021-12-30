@@ -98,12 +98,6 @@
                 <br>
                     <input type="file" name="image" id="image">            
                 <br>
-                <br>
-                <!-- @if ($errors->has('comment'))
-                    <div class="text-danger">
-                        {{ $errors->first('comment') }}
-                    </div>
-                @endif -->
             </div>
 
             <div class="mb-5">

@@ -10,8 +10,13 @@
 
         <form class="form-inline my-2 my-lg-0 ml-2">
             <div class="form-group">
-                <input type="search" class="form-control mr-sm-2" name="search"  value="{{request('search')}}" placeholder="キーワードを入力" aria-label="検索...">
+                <input type="search" class="form-control mr-sm-2" name="search"  value="{{$search}}" placeholder="キーワードを入力" aria-label="検索...">
             </div>
+            <select class="form-control" id="company_id" name="company_id">
+            @foreach($company_name as $items)
+                <option id="company_id" name="company_id" value="{{ $items->id }}">{{ $items->company_name }}</option>
+            @endforeach
+            </select>
             <input type="submit" value="検索" class="btn btn-info">
         </form>
         <br>
@@ -43,7 +48,8 @@
             </tr>
             @endforeach
         </table>
-        
+        <div class = "paginate mt-5 mb-5 d-flex justify-content-center">
+        </div>
     </div>
 </div>
 <script>
