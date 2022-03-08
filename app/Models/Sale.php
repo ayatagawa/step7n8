@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sale extends Model
-{
+class Sale extends Model {
     //テーブル名
     protected $table = 'sales';
 
@@ -19,8 +18,7 @@ class Sale extends Model
     protected $primaryKey = "product_id";
 
     //belongsTo設定
-    public function product()
-    {
+    public function product() {
         return $this->belongsTo('App\Dept\Models\Product');
     }
 }

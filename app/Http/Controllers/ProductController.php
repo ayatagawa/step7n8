@@ -17,12 +17,43 @@ class ProductController extends Controller
      * プロダクト一覧を表示する
      * @return view
      */
-    public function showList(Request $request)
-    {
-        $company_name = \DB::table('companies')->get();
+    public function showList(Request $request) {
+        // $product = new Product;
+        // $products = $product->list();
+        //dd($products);
 
+        // メーカー名検索用
+        $company_name = \DB::table('companies')->get();
         $search = $request->input('search');
-        $maker_name = $request->all('company_id');
+
+     
+        // $products = \DB::table('products');
+        // $products->join('companies', 'products.company_id', '=', 'companies.id');
+
+        // if (!empty($search)) {
+        //     $products->where('product_name', 'LIKE', '%'.$search.'%');
+        // }
+
+        // if ($request->has('company_id')) {
+        //     $products->where('products.company_id', $request->company_id);
+        // }
+
+        // $products->orderBy('products.id', 'asc')->get();
+
+        // // 以下３行移動
+        // $products = \DB::table('products')
+        // ->join('companies','products.company_id','=','companies.id')
+        // ->get();
+        
+
+        if (!empty($search)) {
+            $products->where('product_name', 'LIKE', '%'.$search.'%');
+        }
+
+        if ($request->has('company_id')) {
+            $products->where('products.company_id', $request->company_id);
+        }
+
 
         if(!empty($search)){
             $products = \DB::table('companies')
@@ -53,13 +84,41 @@ class ProductController extends Controller
         return view('product.list', compact('products', 'search', 'company_name'));   
     }
 
+     // 非同期検索
+     public function getProductsBySearch(Request $request)
+     {
+        $products = \DB::table('products')
+        ->select(
+            'products.id as product_id',
+            'products.product_name',
+            'products.price',
+            'products.stock',
+            'products.image',
+            'companies.company_name',
+        )
+        ->join('companies','products.company_id','=','companies.id');
+
+        if ($request->product) {
+            $products->where('products.product_name', 'LIKE', '%' . $request->product . '%');
+        }
+     
+        if ($request->company) {
+            $products->where('products.company_id', $request->company);
+        }
+        
+        $result = $products->get();
+        
+        // error_log(var_export($request->product, true), 3, "./debug.txt");
+        // return response()->json($products);
+        echo json_encode($result);
+     }
+
     /**
      * プロダクト詳細を表示する
      * @param int $id
      * @return view
      */
-    public function showDetail($id)
-    {
+    public function showDetail($id) {
         $product = Product::with('company')->find($id);
 
         if (is_null($product))
@@ -76,7 +135,7 @@ class ProductController extends Controller
      * 
      * @return view
      */
-    public function showCreate(){
+    public function showCreate() {
         $company_name = \DB::table('companies')->get();
         return view('product.form', compact('company_name'));
     }
@@ -86,8 +145,7 @@ class ProductController extends Controller
      * 
      * @return view
      */
-    public function exeStore(ProductRequest $request)
-    {
+    public function exeStore(ProductRequest $request) {
         $product = new Product();
 
         // 商品のデータを受け取る
@@ -95,6 +153,7 @@ class ProductController extends Controller
         $img = $request->file('image');
         if(!empty($img)){
             $img = $request->file('image')->getPathname();
+            // dd($img);
             $imageName = $request->file('image')->storeAs('', $img, 'public');
         }
 
@@ -118,8 +177,7 @@ class ProductController extends Controller
      * @param int $id
      * @return view
      */
-    public function showEdit($id)
-    {
+    public function showEdit($id) {
         $company_name = \DB::table('companies')->get();
         $product = Product::with('company')->find($id);
 
@@ -136,18 +194,16 @@ class ProductController extends Controller
      * プロダクトを更新する
      * 
      */
-    public function exeUpdate(ProductRequest $request)
-    {
+    public function exeUpdate(ProductRequest $request) {
         // 商品のデータを受け取る
         $inputs = $request->all();
         $img = $request->file('image');
         if(!empty($img)){
             $img = $request->file('image')->getPathname();
             $imageName = $request->file('image')->storeAs('', $img, 'public');
-        }
+    }
 
-        
-        \DB::beginTransaction();
+    \DB::beginTransaction();
         try {
             // 商品を更新
             $product = Product::find($inputs['id']);
@@ -176,22 +232,15 @@ class ProductController extends Controller
      * @param int $id
      * @return view
      */
-    public function exeDelete($id)
-    {
+    public function exeDelete($id) {
         if (empty($id)) {
-            \Session::flash('err_msg', 'データがありません。');
-            return redirect(route('products'));
+            return false;
         }
-
         try {
             // ブログを削除
             Product::destroy($id);
-        } catch(\Throwable $e) {
+        }catch(\Throwable $e) {
             throw new \Exception($e->getMessage());
         }
-
-        \Session::flash('err_msg', '削除しました。');
-        return redirect(route('products'));
     }
-
 }

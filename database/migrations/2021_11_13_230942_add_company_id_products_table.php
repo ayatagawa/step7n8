@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCompanyIdProductsTable extends Migration
-{
+class AddCompanyIdProductsTable extends Migration {
     /**
      * Run the migrations.
      *
@@ -26,8 +25,7 @@ class AddCompanyIdProductsTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_company_id_foreign');
         });

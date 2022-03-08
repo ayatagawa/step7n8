@@ -4,15 +4,13 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdArticlesTable extends Migration
-{
+class AddUserIdArticlesTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         if (!Schema::hasColumn('products', 'company_id')){
             Schema::table('products', function (Blueprint $table) {
                 $table->integer('company_id')->unsigned();
@@ -28,8 +26,7 @@ class AddUserIdArticlesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_company_id_foreign');
         });

@@ -4,15 +4,13 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductsTable extends Migration
-{
+class CreateProductsTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         if (!Schema::hasTable('products')) {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -35,8 +33,7 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('products');
     }
 }

@@ -39,3 +39,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/create3', 'UploadController@postimg');
 // // 画像投稿をコントローラーに送信
 // Route::post('/newimgsend', 'UploadController@saveimg');
+
+
+// 以下検索機能非同期
+Route::post('/', 'ProductController@getProductsBySearch'); // url: '/user/index/' + userNameと同じ

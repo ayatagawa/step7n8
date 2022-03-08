@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h2>商品登録フォーム</h2>
-        <form method="POST" action="{{ route('store') }}" onSubmit="return checkSubmit()" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('store') }}" onSubmit="return checkSubmit('登録しますか？')" enctype="multipart/form-data">
         @csrf
             <div class="form-group">
                 <label for="product_name">
@@ -111,13 +111,5 @@
         </form>
     </div>
 </div>
-<script>
-function checkSubmit(){
-if(window.confirm('送信してよろしいですか？')){
-    return true;
-} else {
-    return false;
-}
-}
-</script>
+
 @endsection

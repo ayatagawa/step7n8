@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h2>商品編集フォーム</h2>
-        <form method="POST" action="{{ route('update') }}" onSubmit="return checkSubmit()" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('update') }}" onSubmit="return checkSubmit('編集しますか？')" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id" value="{{ $product->id }}">
 
@@ -122,13 +122,4 @@
         </form>
     </div>
 </div>
-<script>
-function checkSubmit(){
-if(window.confirm('更新してよろしいですか？')){
-    return true;
-} else {
-    return false;
-}
-}
-</script>
 @endsection

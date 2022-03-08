@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UploadController extends Controller
-{
-    public function postimg (){
+class UploadController extends Controller {
+    public function postimg() {
         return view ('img');
     }
     
